@@ -9,7 +9,7 @@
  
 | | Link |
 |---|---|
-| 🌐 **Aplicação online (Render)** | **COLE AQUI O LINK DO RENDER** <br> _ex.: https://petpath-saude.onrender.com_ |
+| 🌐 **Aplicação online (Render)** | **https://petpath-saude-final.onrender.com** <br> |
 | 🎬 **Vídeo** | **COLE AQUI O LINK DO VÍDEO** <br> _ex.: https://youtu.be/..._ |
 | 📁 Repositório | **COLE AQUI O LINK DO GITHUB** |
 
