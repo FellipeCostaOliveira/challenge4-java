@@ -1,0 +1,160 @@
+/* PetPath Saúde — identidade visual
+   Verde da marca (logo) + acento coral para chamadas à ação afetivas. */
+:root {
+  --pp-verde: #1f7a5c;
+  --pp-verde-escuro: #145440;
+  --pp-verde-claro: #e7f3ee;
+  --pp-coral: #f0805a;
+  --pp-coral-claro: #fdeee8;
+  --pp-tinta: #1d2a26;
+  --pp-texto-suave: #5d6b66;
+  --pp-fundo: #f5f7f6;
+  --pp-borda: #e2e8e5;
+  --pp-raio: 16px;
+  --pp-sombra: 0 1px 2px rgba(20, 40, 32, .06), 0 6px 20px rgba(20, 40, 32, .06);
+
+  --bs-body-font-family: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --bs-body-color: var(--pp-tinta);
+  --bs-body-bg: var(--pp-fundo);
+  --bs-link-color: var(--pp-verde);
+  --bs-link-hover-color: var(--pp-verde-escuro);
+  --bs-link-color-rgb: 31, 122, 92;
+  --bs-link-hover-color-rgb: 20, 84, 64;
+  --bs-primary: var(--pp-verde);
+  --bs-primary-rgb: 31, 122, 92;
+  --bs-border-color: var(--pp-borda);
+}
+
+body { min-height: 100vh; display: flex; flex-direction: column; }
+main { flex: 1; }
+h1, h2, h3, .h4, .h5 { font-weight: 700; letter-spacing: -.01em; }
+.text-suave { color: var(--pp-texto-suave) !important; }
+
+/* Botões */
+.btn { border-radius: 10px; font-weight: 600; }
+.btn-primary {
+  --bs-btn-bg: var(--pp-verde); --bs-btn-border-color: var(--pp-verde);
+  --bs-btn-hover-bg: var(--pp-verde-escuro); --bs-btn-hover-border-color: var(--pp-verde-escuro);
+  --bs-btn-active-bg: var(--pp-verde-escuro); --bs-btn-active-border-color: var(--pp-verde-escuro);
+  --bs-btn-disabled-bg: var(--pp-verde); --bs-btn-disabled-border-color: var(--pp-verde);
+  --bs-btn-focus-shadow-rgb: 31, 122, 92;
+}
+.btn-outline-primary {
+  --bs-btn-color: var(--pp-verde); --bs-btn-border-color: var(--pp-verde);
+  --bs-btn-hover-bg: var(--pp-verde); --bs-btn-hover-border-color: var(--pp-verde);
+  --bs-btn-active-bg: var(--pp-verde-escuro); --bs-btn-active-border-color: var(--pp-verde-escuro);
+  --bs-btn-focus-shadow-rgb: 31, 122, 92;
+}
+.btn-coral {
+  --bs-btn-color: #fff; --bs-btn-bg: var(--pp-coral); --bs-btn-border-color: var(--pp-coral);
+  --bs-btn-hover-color: #fff; --bs-btn-hover-bg: #d96a45; --bs-btn-hover-border-color: #d96a45;
+  --bs-btn-active-color: #fff; --bs-btn-active-bg: #c95f3d; --bs-btn-active-border-color: #c95f3d;
+}
+.form-control:focus, .form-select:focus, .form-check-input:focus {
+  border-color: var(--pp-verde); box-shadow: 0 0 0 .2rem rgba(31, 122, 92, .18);
+}
+.form-check-input:checked { background-color: var(--pp-verde); border-color: var(--pp-verde); }
+.form-label { font-weight: 600; font-size: .92rem; }
+.form-control, .form-select { border-radius: 10px; padding: .6rem .8rem; }
+
+/* Navbar */
+.app-navbar { background: #fff; border-bottom: 1px solid var(--pp-borda); }
+.app-navbar .navbar-brand { font-weight: 800; color: var(--pp-verde-escuro); display: flex; align-items: center; gap: .5rem; }
+.app-navbar .navbar-brand span { color: var(--pp-coral); }
+.app-navbar .nav-link { font-weight: 600; color: var(--pp-texto-suave); border-radius: 10px; padding: .45rem .8rem !important; }
+.app-navbar .nav-link:hover { color: var(--pp-verde); background: var(--pp-verde-claro); }
+.app-navbar .nav-link.active { color: var(--pp-verde); background: var(--pp-verde-claro); }
+.avatar {
+  width: 38px; height: 38px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
+  background: var(--pp-verde); color: #fff; font-weight: 700; font-size: .9rem; flex-shrink: 0;
+}
+
+/* Cards e superfícies */
+.card { border: 1px solid var(--pp-borda); border-radius: var(--pp-raio); box-shadow: var(--pp-sombra); }
+.card-header { background: transparent; border-bottom: 1px solid var(--pp-borda); font-weight: 700; padding: 1rem 1.25rem; }
+.card-body { padding: 1.25rem; }
+.cabecalho-pagina { display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-end; justify-content: space-between; margin-bottom: 1.5rem; }
+.cabecalho-pagina h1 { margin: 0; font-size: 1.75rem; }
+.cabecalho-pagina p { margin: .25rem 0 0; color: var(--pp-texto-suave); }
+
+.indicador { display: flex; gap: 1rem; align-items: center; }
+.indicador .icone {
+  width: 48px; height: 48px; border-radius: 14px; display: inline-flex; align-items: center; justify-content: center;
+  font-size: 1.35rem; background: var(--pp-verde-claro); color: var(--pp-verde);
+}
+.indicador .icone.coral { background: var(--pp-coral-claro); color: var(--pp-coral); }
+.indicador .valor { font-size: 1.75rem; font-weight: 800; line-height: 1; }
+.indicador .rotulo { color: var(--pp-texto-suave); font-size: .875rem; }
+
+/* Tabelas */
+.table { margin: 0; --bs-table-bg: transparent; }
+.table > thead th { font-size: .78rem; text-transform: uppercase; letter-spacing: .04em; color: var(--pp-texto-suave); font-weight: 700; border-bottom-width: 1px; white-space: nowrap; }
+.table > tbody td { vertical-align: middle; padding-top: .8rem; padding-bottom: .8rem; }
+.table-hover > tbody > tr:hover > * { --bs-table-bg-state: var(--pp-verde-claro); }
+
+/* Avatar de pet por espécie */
+.pet-avatar {
+  width: 44px; height: 44px; border-radius: 14px; background: var(--pp-coral-claro);
+  display: inline-flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0;
+}
+.pet-avatar.grande { width: 72px; height: 72px; font-size: 2.3rem; border-radius: 20px; }
+
+/* Badges de status e situação */
+.badge { font-weight: 600; padding: .4em .7em; border-radius: 999px; }
+.badge-suave-verde { background: var(--pp-verde-claro); color: var(--pp-verde-escuro); }
+.badge-suave-coral { background: var(--pp-coral-claro); color: #b5492a; }
+.badge-suave-amarelo { background: #fff4d6; color: #8a6300; }
+.badge-suave-azul { background: #e5f0fb; color: #1f5b94; }
+.badge-suave-cinza { background: #eef0ef; color: #5d6b66; }
+
+.progress { height: 10px; border-radius: 999px; background: #edf1ef; }
+
+/* Estado vazio */
+.estado-vazio { text-align: center; padding: 2.5rem 1rem; color: var(--pp-texto-suave); }
+.estado-vazio i { font-size: 2.4rem; color: var(--pp-verde); display: block; margin-bottom: .75rem; }
+.estado-vazio h3 { font-size: 1.1rem; color: var(--pp-tinta); }
+
+/* Filtros */
+.filtro-pills .btn { border-radius: 999px; }
+
+/* Autenticação (login / cadastro) */
+.auth-pagina { min-height: 100vh; display: grid; grid-template-columns: 1fr; }
+.auth-marca {
+  background: linear-gradient(150deg, var(--pp-verde) 0%, var(--pp-verde-escuro) 100%);
+  color: #fff; padding: 3rem; display: none; flex-direction: column; justify-content: center;
+}
+.auth-marca h2 { font-size: 2.2rem; font-weight: 800; }
+.auth-marca li { margin-bottom: .9rem; display: flex; gap: .75rem; align-items: flex-start; }
+.auth-marca li i { font-size: 1.3rem; color: #ffd2bf; }
+.auth-formulario { display: flex; align-items: center; justify-content: center; padding: 2rem 1rem; }
+.auth-card { width: 100%; max-width: 440px; }
+.auth-card.largo { max-width: 680px; }
+@media (min-width: 992px) {
+  .auth-pagina { grid-template-columns: 5fr 7fr; }
+  .auth-marca { display: flex; }
+}
+
+/* Linha do tempo do histórico */
+.linha-tempo { list-style: none; padding: 0; margin: 0; }
+.linha-tempo li { position: relative; padding: 0 0 1.25rem 1.75rem; }
+.linha-tempo li::before { content: ""; position: absolute; left: 7px; top: 6px; bottom: -6px; width: 2px; background: var(--pp-borda); }
+.linha-tempo li:last-child::before { display: none; }
+.linha-tempo .ponto { position: absolute; left: 0; top: 4px; width: 16px; height: 16px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 2px var(--pp-borda); }
+
+footer.rodape { color: var(--pp-texto-suave); font-size: .85rem; border-top: 1px solid var(--pp-borda); background: #fff; }
+
+@media (max-width: 575.98px) {
+  .cabecalho-pagina h1 { font-size: 1.45rem; }
+  .table-responsiva-cards thead { display: none; }
+}
+
+/* Cor da barra do ciclo preventivo conforme a situação */
+.barra-EM_DIA { background-color: var(--pp-verde); }
+.barra-ATENCAO { background-color: #e5a800; }
+.barra-ATRASADO, .barra-SEM_HISTORICO { background-color: var(--pp-coral); }
+
+/* Respiro lateral das tabelas dentro de cards */
+.card > .table-responsive .table > :not(caption) > tr > :first-child,
+.card > .table-responsive .table > :not(caption) > * > tr > :first-child { padding-left: 1.25rem; }
+.card > .table-responsive .table > :not(caption) > * > tr > :last-child { padding-right: 1.25rem; }
+.card > .table-responsive .table > tbody > tr:last-child > * { border-bottom: 0; }

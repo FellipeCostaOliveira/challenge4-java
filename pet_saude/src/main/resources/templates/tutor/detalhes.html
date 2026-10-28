@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/layout :: cabecalho(${tutor.nome})}"></head>
+<body>
+	<nav th:replace="~{fragmentos/layout :: menu}"></nav>
+	<main class="container py-4">
+		<nav aria-label="Caminho" class="mb-2">
+			<ol class="breadcrumb small">
+				<li class="breadcrumb-item"><a th:href="@{/tutores}">Tutores</a></li>
+				<li class="breadcrumb-item active" aria-current="page" th:text="${tutor.nome}">Tutor</li>
+			</ol>
+		</nav>
+		<div class="cabecalho-pagina">
+			<div>
+				<h1 th:text="${tutor.nome}">Tutor</h1>
+				<p th:text="${#lists.size(pets)} + ' pet(s) cadastrado(s)'">0 pets</p>
+			</div>
+		</div>
+
+		<div class="row g-4">
+			<div class="col-lg-4">
+				<div class="card">
+					<div class="card-header"><i class="bi bi-person-vcard me-2 text-success"></i>Contato</div>
+					<div class="card-body">
+						<dl class="mb-0 small">
+							<dt>CPF</dt>
+							<dd th:text="${tutor.cpf}">CPF</dd>
+							<dt>E-mail</dt>
+							<dd><a th:href="'mailto:' + ${tutor.email}" th:text="${tutor.email}">E-mail</a></dd>
+							<dt>Telefone</dt>
+							<dd class="mb-0"><a th:href="'tel:' + ${tutor.telefone}" th:text="${tutor.telefone}">Telefone</a></dd>
+						</dl>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-8">
+				<div class="card">
+					<div class="card-header"><i class="bi bi-heart-pulse me-2 text-success"></i>Pets deste tutor</div>
+					<th:block th:unless="${pets.isEmpty()}">
+						<div th:replace="~{fragmentos/componentes :: tabelaPets(${pets}, false)}"></div>
+					</th:block>
+					<th:block th:if="${pets.isEmpty()}">
+						<div th:replace="~{fragmentos/componentes :: estadoVazio('bi-heart', 'Nenhum pet cadastrado', 'Este tutor ainda não cadastrou pets.')}"></div>
+					</th:block>
+				</div>
+			</div>
+		</div>
+	</main>
+	<footer th:replace="~{fragmentos/layout :: rodape}"></footer>
+	<th:block th:replace="~{fragmentos/layout :: scripts}"></th:block>
+</body>
+</html>

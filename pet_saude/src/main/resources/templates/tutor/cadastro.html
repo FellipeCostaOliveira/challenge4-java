@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/layout :: cabecalho('Criar conta')}"></head>
+<body>
+	<main class="auth-formulario">
+		<div class="auth-card largo">
+			<div class="d-flex align-items-center gap-3 mb-4">
+				<img th:src="@{/img/logo.svg}" alt="" width="52" height="52">
+				<div>
+					<h1 class="h3 mb-0">Criar conta de tutor</h1>
+					<p class="text-suave mb-0">Leva menos de um minuto. Depois é só cadastrar seu pet.</p>
+				</div>
+			</div>
+
+			<div th:replace="~{fragmentos/layout :: alertas}"></div>
+
+			<form th:object="${form}" th:action="@{/cadastro}" method="post" class="card" novalidate>
+				<div class="card-body p-4">
+					<h2 class="h6 text-uppercase text-suave mb-3">Seus dados</h2>
+					<div class="row">
+						<div class="col-12">
+							<div th:replace="~{fragmentos/formulario :: campo('nome', 'Nome completo', 'text', null)}"></div>
+						</div>
+						<div class="col-md-6">
+							<div th:replace="~{fragmentos/formulario :: campo('cpf', 'CPF', 'text', 'Somente números ou com pontuação.')}"></div>
+						</div>
+						<div class="col-md-6">
+							<div th:replace="~{fragmentos/formulario :: campo('telefone', 'Telefone (com DDD)', 'tel', null)}"></div>
+						</div>
+						<div class="col-12">
+							<div th:replace="~{fragmentos/formulario :: campo('email', 'E-mail', 'email', null)}"></div>
+						</div>
+					</div>
+
+					<h2 class="h6 text-uppercase text-suave mb-3 mt-2">Acesso</h2>
+					<div class="row">
+						<div class="col-12">
+							<div th:replace="~{fragmentos/formulario :: campo('username', 'Nome de usuário', 'text', 'Letras, números, ponto, hífen ou sublinhado.')}"></div>
+						</div>
+						<div class="col-md-6">
+							<div th:replace="~{fragmentos/formulario :: campo('senha', 'Senha', 'password', 'Mínimo de 6 caracteres.')}"></div>
+						</div>
+						<div class="col-md-6">
+							<div th:replace="~{fragmentos/formulario :: campo('confirmarSenha', 'Confirmar senha', 'password', null)}"></div>
+						</div>
+					</div>
+
+					<button type="submit" class="btn btn-primary w-100 py-2 mt-2">Criar minha conta</button>
+				</div>
+			</form>
+			<p class="text-center mt-3">Já tem conta? <a th:href="@{/login}" class="fw-semibold">Entrar</a></p>
+		</div>
+	</main>
+	<th:block th:replace="~{fragmentos/layout :: scripts}"></th:block>
+</body>
+</html>

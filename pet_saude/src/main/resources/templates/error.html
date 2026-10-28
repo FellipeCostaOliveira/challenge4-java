@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<!-- Página de erro padrão do Spring Boot (erros fora dos controllers, ex.: URL inexistente). -->
+<head th:replace="~{fragmentos/layout :: cabecalho('Erro')}"></head>
+<body>
+	<main class="container py-5">
+		<div class="card mx-auto text-center" style="max-width: 560px;">
+			<div class="card-body p-5">
+				<div class="display-5 fw-bold text-success mb-2" th:text="${status}">404</div>
+				<h1 class="h4" th:text="${status == 404} ? 'Página não encontrada' : 'Algo deu errado'">Erro</h1>
+				<p class="text-suave">Use o botão abaixo para voltar à aplicação.</p>
+				<a th:href="@{/home}" class="btn btn-primary mt-2">Ir para o início</a>
+			</div>
+		</div>
+	</main>
+</body>
+</html>

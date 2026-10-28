@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/layout :: cabecalho(${pet.nome})}"></head>
+<body>
+	<nav th:replace="~{fragmentos/layout :: menu}"></nav>
+	<main class="container py-4" th:with="resumo=${resumoSaude}">
+		<div th:replace="~{fragmentos/layout :: alertas}"></div>
+
+		<nav aria-label="Caminho" class="mb-2">
+			<ol class="breadcrumb small">
+				<li class="breadcrumb-item"><a th:href="@{/pets}">Pets</a></li>
+				<li class="breadcrumb-item active" aria-current="page" th:text="${pet.nome}">Pet</li>
+			</ol>
+		</nav>
+
+		<div class="cabecalho-pagina">
+			<div class="d-flex align-items-center gap-3">
+				<span th:replace="~{fragmentos/componentes :: avatarPet(${pet.especie}, 'grande')}"></span>
+				<div>
+					<h1 th:text="${pet.nome}">Pet</h1>
+					<div class="d-flex flex-wrap gap-2 mt-1">
+						<span class="badge badge-suave-cinza" th:text="${pet.especie.descricao} + ' · ' + ${pet.raca}">Espécie</span>
+						<span class="badge badge-suave-azul" th:text="${resumo.faixaEtaria.descricao} + ' · ' + ${resumo.idadeDescricao}">Faixa</span>
+						<th:block th:replace="~{fragmentos/componentes :: badgeAtivo(${pet.ativo})}"></th:block>
+					</div>
+				</div>
+			</div>
+			<div class="d-flex flex-wrap gap-2">
+				<a th:if="${pet.ativo}" th:href="@{/consultas/agendar/{id}(id=${pet.id})}" class="btn btn-coral">
+					<i class="bi bi-calendar-plus me-1"></i>Agendar consulta</a>
+				<a th:href="@{/pets/{id}/editar(id=${pet.id})}" class="btn btn-outline-primary"><i class="bi bi-pencil me-1"></i>Editar</a>
+				<form th:action="@{/pets/{id}/remover(id=${pet.id})}" method="post"
+					th:data-confirmar="${historico.isEmpty()} ? ('Remover ' + ${pet.nome} + ' definitivamente?') : (${pet.nome} + ' tem histórico de consultas, então será inativado (o prontuário é preservado). Continuar?')"
+					th:data-confirmar-botao="${historico.isEmpty()} ? 'Remover' : 'Inativar'">
+					<button type="submit" class="btn btn-outline-danger" th:disabled="${!pet.ativo and !historico.isEmpty()}">
+						<i class="bi bi-trash me-1"></i><th:block th:text="${historico.isEmpty()} ? 'Remover' : 'Inativar'">Remover</th:block>
+					</button>
+				</form>
+			</div>
+		</div>
+
+		<div class="row g-4">
+			<div class="col-lg-5">
+				<div class="card mb-4">
+					<div class="card-header"><i class="bi bi-activity me-2 text-success"></i>Plano preventivo</div>
+					<div class="card-body">
+						<div th:replace="~{fragmentos/componentes :: planoPreventivo(${resumo})}"></div>
+						<hr>
+						<dl class="row small mb-0">
+							<dt class="col-7 fw-semibold">Check-up recomendado a cada</dt>
+							<dd class="col-5 text-end" th:text="${resumo.intervaloRecomendadoMeses} + ' meses'">12 meses</dd>
+							<dt class="col-7 fw-semibold">Último atendimento</dt>
+							<dd class="col-5 text-end"
+								th:text="${resumo.dataUltimaConsultaRealizada != null} ? ${#temporals.format(resumo.dataUltimaConsultaRealizada, 'dd/MM/yyyy')} : '—'">—</dd>
+							<dt class="col-7 fw-semibold">Próximo check-up sugerido</dt>
+							<dd class="col-5 text-end" th:text="${#temporals.format(resumo.dataProximaConsultaSugerida, 'dd/MM/yyyy')}">—</dd>
+							<dt class="col-7 fw-semibold">Consulta já marcada</dt>
+							<dd class="col-5 text-end"
+								th:text="${resumo.possuiConsultaAgendada()} ? (${#temporals.format(resumo.proximaConsultaAgendada.dataConsulta, 'dd/MM/yyyy')} + ' ' + ${#temporals.format(resumo.proximaConsultaAgendada.horario, 'HH:mm')}) : 'Nenhuma'">Nenhuma</dd>
+						</dl>
+						<p class="small text-suave mt-3 mb-0"><i class="bi bi-info-circle me-1"></i>Referência geral por espécie e idade. A conduta final é sempre do médico-veterinário.</p>
+					</div>
+				</div>
+
+				<div class="card">
+					<div class="card-header"><i class="bi bi-card-text me-2 text-success"></i>Dados do pet</div>
+					<div class="card-body">
+						<dl class="row small mb-0">
+							<dt class="col-6 fw-semibold">Nascimento</dt>
+							<dd class="col-6 text-end" th:text="${#temporals.format(pet.dataNascimento, 'dd/MM/yyyy')}">—</dd>
+							<dt class="col-6 fw-semibold">Peso</dt>
+							<dd class="col-6 text-end" th:text="${#numbers.formatDecimal(pet.peso, 1, 1, 'COMMA')} + ' kg'">—</dd>
+							<dt class="col-6 fw-semibold">Tutor</dt>
+							<dd class="col-6 text-end mb-0">
+								<a th:if="${isAdminLogado}" th:href="@{/tutores/{id}(id=${pet.tutor.id})}" th:text="${pet.tutor.nome}">Tutor</a>
+								<span th:unless="${isAdminLogado}" th:text="${pet.tutor.nome}">Tutor</span>
+							</dd>
+						</dl>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-lg-7">
+				<div class="card h-100">
+					<div class="card-header d-flex justify-content-between">
+						<span><i class="bi bi-journal-medical me-2 text-success"></i>Histórico de consultas</span>
+						<span class="text-suave fw-normal small"
+							th:text="${resumo.consultasRealizadas} + ' realizada(s) · ' + ${resumo.consultasPreventivasRealizadas} + ' preventiva(s)'">0</span>
+					</div>
+					<th:block th:unless="${historico.isEmpty()}">
+						<div th:replace="~{fragmentos/componentes :: tabelaConsultas(${historico}, false, true)}"></div>
+					</th:block>
+					<th:block th:if="${historico.isEmpty()}">
+						<div th:replace="~{fragmentos/componentes :: estadoVazio('bi-journal-plus', 'Sem consultas ainda', 'Agende a primeira consulta para começar o histórico de saúde.')}"></div>
+					</th:block>
+				</div>
+			</div>
+		</div>
+
+		<th:block th:if="${isAdminLogado}">
+			<div th:replace="~{consulta/modal-realizar :: modalRealizar}"></div>
+		</th:block>
+	</main>
+	<footer th:replace="~{fragmentos/layout :: rodape}"></footer>
+	<th:block th:replace="~{fragmentos/layout :: scripts}"></th:block>
+</body>
+</html>

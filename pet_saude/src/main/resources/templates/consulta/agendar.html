@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/layout :: cabecalho('Agendar consulta')}"></head>
+<body>
+	<nav th:replace="~{fragmentos/layout :: menu}"></nav>
+	<main class="container py-4" style="max-width: 760px;">
+		<nav aria-label="Caminho" class="mb-2">
+			<ol class="breadcrumb small">
+				<li class="breadcrumb-item"><a th:href="@{/pets}">Pets</a></li>
+				<li class="breadcrumb-item"><a th:href="@{/pets/{id}(id=${pet.id})}" th:text="${pet.nome}">Pet</a></li>
+				<li class="breadcrumb-item active" aria-current="page">Agendar</li>
+			</ol>
+		</nav>
+
+		<div class="cabecalho-pagina">
+			<div class="d-flex align-items-center gap-3">
+				<span th:replace="~{fragmentos/componentes :: avatarPet(${pet.especie}, '')}"></span>
+				<div>
+					<h1>Agendar consulta</h1>
+					<p th:text="${pet.nome} + ' · ' + ${pet.especie.descricao} + ' · ' + ${pet.raca}">Pet</p>
+				</div>
+			</div>
+		</div>
+
+		<div th:replace="~{fragmentos/layout :: alertas}"></div>
+
+		<form th:object="${consulta}" th:action="@{/consultas/agendar/{id}(id=${pet.id})}" method="post" class="card" novalidate>
+			<div class="card-body p-4">
+				<div class="alert alert-light border small d-flex gap-2" role="note">
+					<i class="bi bi-clock text-success"></i>
+					<span>Atendimento de segunda a sábado, das
+						<b th:text="${#temporals.format(horarioAbertura, 'HH:mm')}">08:00</b> às
+						<b th:text="${#temporals.format(ultimoHorario, 'HH:mm')}">17:30</b> (horários a cada 30 minutos).</span>
+				</div>
+				<div class="row">
+					<div class="col-md-6 mb-3">
+						<label class="form-label" for="dataConsulta">Data</label>
+						<input class="form-control" type="date" th:field="*{dataConsulta}" th:errorclass="is-invalid"
+							th:min="${dataMinima}">
+						<div class="invalid-feedback" th:errors="*{dataConsulta}">Erro</div>
+					</div>
+					<div class="col-md-6 mb-3">
+						<label class="form-label" for="horario">Horário</label>
+						<input class="form-control" type="time" th:field="*{horario}" th:errorclass="is-invalid"
+							th:min="${horarioAbertura}" th:max="${ultimoHorario}" step="1800">
+						<div class="invalid-feedback" th:errors="*{horario}">Erro</div>
+					</div>
+				</div>
+				<div th:replace="~{fragmentos/formulario :: campoSelect('tipo', 'Tipo de consulta', ${tipos})}"></div>
+				<div th:replace="~{fragmentos/formulario :: campoTexto('descricao', 'Motivo da consulta', 200)}"></div>
+
+				<div class="d-flex justify-content-end gap-2 mt-2">
+					<a th:href="@{/pets/{id}(id=${pet.id})}" class="btn btn-light">Cancelar</a>
+					<button type="submit" class="btn btn-primary"><i class="bi bi-calendar-check me-1"></i>Confirmar agendamento</button>
+				</div>
+			</div>
+		</form>
+	</main>
+	<footer th:replace="~{fragmentos/layout :: rodape}"></footer>
+	<th:block th:replace="~{fragmentos/layout :: scripts}"></th:block>
+</body>
+</html>

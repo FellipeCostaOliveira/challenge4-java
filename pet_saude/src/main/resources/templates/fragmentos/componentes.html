@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<!-- Componentes visuais reutilizados em várias telas (evita repetir tabelas, badges e estados vazios). -->
+<body>
+
+	<!-- Avatar do pet conforme a espécie -->
+	<span th:fragment="avatarPet(especie, tamanho)" class="pet-avatar" th:classappend="${tamanho}" aria-hidden="true"
+		th:switch="${especie.name()}">
+		<th:block th:case="'CACHORRO'">🐶</th:block>
+		<th:block th:case="'GATO'">🐱</th:block>
+		<th:block th:case="'PASSARO'">🐦</th:block>
+		<th:block th:case="'COELHO'">🐰</th:block>
+		<th:block th:case="'HAMSTER'">🐹</th:block>
+		<th:block th:case="*">🐾</th:block>
+	</span>
+
+	<!-- Status da consulta -->
+	<th:block th:fragment="badgeStatus(status)" th:switch="${status.name()}">
+		<span th:case="'AGENDADA'" class="badge badge-suave-azul"><i class="bi bi-clock me-1"></i>Agendada</span>
+		<span th:case="'REALIZADA'" class="badge badge-suave-verde"><i class="bi bi-check2 me-1"></i>Realizada</span>
+		<span th:case="*" class="badge badge-suave-cinza"><i class="bi bi-x me-1"></i>Cancelada</span>
+	</th:block>
+
+	<!-- Situação do plano preventivo -->
+	<th:block th:fragment="badgeSituacao(situacao)" th:switch="${situacao.name()}">
+		<span th:case="'EM_DIA'" class="badge badge-suave-verde"><i class="bi bi-shield-check me-1"></i><th:block th:text="${situacao.descricao}"></th:block></span>
+		<span th:case="'ATENCAO'" class="badge badge-suave-amarelo"><i class="bi bi-hourglass-split me-1"></i><th:block th:text="${situacao.descricao}"></th:block></span>
+		<span th:case="*" class="badge badge-suave-coral"><i class="bi bi-exclamation-circle me-1"></i><th:block th:text="${situacao.descricao}"></th:block></span>
+	</th:block>
+
+	<!-- Pet ativo / inativo -->
+	<th:block th:fragment="badgeAtivo(ativo)">
+		<span th:if="${ativo}" class="badge badge-suave-verde">Ativo</span>
+		<span th:unless="${ativo}" class="badge badge-suave-cinza">Inativo</span>
+	</th:block>
+
+	<!-- Mensagem para listas sem registros -->
+	<div th:fragment="estadoVazio(icone, titulo, texto)" class="estado-vazio">
+		<i class="bi" th:classappend="${icone}" aria-hidden="true"></i>
+		<h3 th:text="${titulo}">Nada por aqui</h3>
+		<p class="mb-0" th:text="${texto}">Texto</p>
+	</div>
+
+	<!-- Bloco do Plano Preventivo (usado na home do tutor e nos detalhes do pet) -->
+	<div th:fragment="planoPreventivo(resumo)">
+		<div class="d-flex justify-content-between align-items-center mb-2">
+			<span class="small fw-semibold text-suave">Ciclo de check-up</span>
+			<th:block th:replace="~{fragmentos/componentes :: badgeSituacao(${resumo.situacao})}"></th:block>
+		</div>
+		<div class="progress mb-2" role="progressbar" aria-label="Quanto do intervalo recomendado já passou"
+			th:aria-valuenow="${resumo.percentualCiclo}" aria-valuemin="0" aria-valuemax="100">
+			<div class="progress-bar" th:classappend="'barra-' + ${resumo.situacao.name()}"
+				th:style="'width: ' + ${resumo.percentualCiclo} + '%'"></div>
+		</div>
+		<p class="small mb-0" th:text="${resumo.recomendacao}">Recomendação</p>
+	</div>
+
+	<!-- Tabela de pets -->
+	<div th:fragment="tabelaPets(pets, mostrarTutor)" class="table-responsive">
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th scope="col">Pet</th>
+					<th scope="col">Espécie</th>
+					<th scope="col" class="d-none d-md-table-cell">Nascimento</th>
+					<th scope="col" th:if="${mostrarTutor}">Tutor</th>
+					<th scope="col">Status</th>
+					<th scope="col" class="text-end"><span class="visually-hidden">Ações</span></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="pet : ${pets}">
+					<td>
+						<div class="d-flex align-items-center gap-2">
+							<span th:replace="~{fragmentos/componentes :: avatarPet(${pet.especie}, '')}"></span>
+							<div>
+								<a class="fw-semibold text-decoration-none" th:href="@{/pets/{id}(id=${pet.id})}" th:text="${pet.nome}">Nome</a>
+								<div class="small text-suave" th:text="${pet.raca}">Raça</div>
+							</div>
+						</div>
+					</td>
+					<td th:text="${pet.especie.descricao}">Espécie</td>
+					<td class="d-none d-md-table-cell" th:text="${#temporals.format(pet.dataNascimento, 'dd/MM/yyyy')}">01/01/2020</td>
+					<td th:if="${mostrarTutor}" th:text="${pet.tutor.nome}">Tutor</td>
+					<td><th:block th:replace="~{fragmentos/componentes :: badgeAtivo(${pet.ativo})}"></th:block></td>
+					<td class="text-end">
+						<a class="btn btn-sm btn-outline-primary" th:href="@{/pets/{id}(id=${pet.id})}">Ver ficha</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<!-- Tabela de consultas -->
+	<div th:fragment="tabelaConsultas(consultas, mostrarTutor, mostrarAcoes)" class="table-responsive">
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th scope="col">Pet</th>
+					<th scope="col" th:if="${mostrarTutor}">Tutor</th>
+					<th scope="col">Data e hora</th>
+					<th scope="col">Tipo / motivo</th>
+					<th scope="col">Status</th>
+					<th scope="col" th:if="${mostrarAcoes}" class="text-end"><span class="visually-hidden">Ações</span></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="c : ${consultas}">
+					<td>
+						<div class="d-flex align-items-center gap-2">
+							<span th:replace="~{fragmentos/componentes :: avatarPet(${c.pet.especie}, '')}"></span>
+							<a class="fw-semibold text-decoration-none" th:href="@{/pets/{id}(id=${c.pet.id})}" th:text="${c.pet.nome}">Pet</a>
+						</div>
+					</td>
+					<td th:if="${mostrarTutor}" th:text="${c.pet.tutor.nome}">Tutor</td>
+					<td class="text-nowrap">
+						<div class="fw-semibold" th:text="${#temporals.format(c.dataConsulta, 'dd/MM/yyyy')}">01/01/2026</div>
+						<div class="small text-suave" th:text="${#temporals.format(c.horario, 'HH:mm')}">09:00</div>
+					</td>
+					<td>
+						<div th:text="${c.tipo.descricao}">Tipo</div>
+						<div class="small text-suave" th:text="${c.descricao}">Motivo</div>
+						<div class="small mt-1" th:if="${c.observacoes != null}">
+							<i class="bi bi-journal-medical me-1 text-success"></i><span th:text="${c.observacoes}">Obs</span>
+						</div>
+					</td>
+					<td><th:block th:replace="~{fragmentos/componentes :: badgeStatus(${c.status})}"></th:block></td>
+					<td th:if="${mostrarAcoes}" class="text-end text-nowrap">
+						<th:block th:if="${c.agendada}">
+							<button th:if="${isAdminLogado}" type="button" class="btn btn-sm btn-primary"
+								data-bs-toggle="modal" data-bs-target="#modalRealizar"
+								th:data-acao="@{/admin/consultas/{id}/realizar(id=${c.id})}" th:data-pet="${c.pet.nome}">
+								<i class="bi bi-check2-circle me-1"></i>Realizada
+							</button>
+							<form th:action="@{/consultas/{id}/cancelar(id=${c.id})}" method="post" class="d-inline"
+								th:data-confirmar="'Cancelar a consulta de ' + ${c.pet.nome} + ' em ' + ${#temporals.format(c.dataConsulta, 'dd/MM/yyyy')} + '?'"
+								data-confirmar-botao="Cancelar consulta">
+								<button type="submit" class="btn btn-sm btn-outline-danger">Cancelar</button>
+							</form>
+						</th:block>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+</body>
+</html>

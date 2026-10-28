@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<!--
+	Campos de formulário reutilizáveis. Devem ser incluídos dentro de um <form th:object="...">.
+	Cada campo já traz label associado (acessibilidade), classe de erro e mensagem de validação.
+-->
+<body>
+
+	<div th:fragment="campo(campo, rotulo, tipo, dica)" class="mb-3">
+		<label class="form-label" th:for="${campo}" th:text="${rotulo}">Rótulo</label>
+		<input class="form-control" th:type="${tipo}" th:field="*{__${campo}__}" th:errorclass="is-invalid"
+			th:step="${tipo == 'number'} ? '0.1' : null"
+			th:aria-describedby="${dica != null} ? ${campo + '-dica'} : null">
+		<div class="form-text" th:if="${dica != null}" th:id="${campo} + '-dica'" th:text="${dica}">Dica</div>
+		<div class="invalid-feedback" th:errors="*{__${campo}__}">Erro</div>
+	</div>
+
+	<div th:fragment="campoSelect(campo, rotulo, opcoes)" class="mb-3">
+		<label class="form-label" th:for="${campo}" th:text="${rotulo}">Rótulo</label>
+		<select class="form-select" th:field="*{__${campo}__}" th:errorclass="is-invalid">
+			<option value="">Selecione...</option>
+			<option th:each="opcao : ${opcoes}" th:value="${opcao}" th:text="${opcao.descricao}">Opção</option>
+		</select>
+		<div class="invalid-feedback" th:errors="*{__${campo}__}">Erro</div>
+	</div>
+
+	<div th:fragment="campoTexto(campo, rotulo, maximo)" class="mb-3">
+		<label class="form-label" th:for="${campo}" th:text="${rotulo}">Rótulo</label>
+		<textarea class="form-control" rows="3" th:field="*{__${campo}__}" th:errorclass="is-invalid"
+			th:maxlength="${maximo}"></textarea>
+		<div class="form-text" th:text="'Até ' + ${maximo} + ' caracteres.'">Limite</div>
+		<div class="invalid-feedback" th:errors="*{__${campo}__}">Erro</div>
+	</div>
+
+	<form th:fragment="busca(acao, valor, placeholder)" th:action="@{${acao}}" method="get" role="search"
+		class="d-flex gap-2">
+		<label class="visually-hidden" for="busca" th:text="${placeholder}">Buscar</label>
+		<input class="form-control" type="search" id="busca" name="busca" th:value="${valor}"
+			th:placeholder="${placeholder}">
+		<button type="submit" class="btn btn-outline-primary" aria-label="Buscar"><i class="bi bi-search"></i></button>
+	</form>
+
+</body>
+</html>

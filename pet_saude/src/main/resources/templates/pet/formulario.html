@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/layout :: cabecalho(${edicao} ? 'Editar pet' : 'Cadastrar pet')}"></head>
+<body>
+	<nav th:replace="~{fragmentos/layout :: menu}"></nav>
+	<main class="container py-4" style="max-width: 760px;">
+		<div th:replace="~{fragmentos/layout :: alertas}"></div>
+
+		<nav aria-label="Caminho" class="mb-2">
+			<ol class="breadcrumb small">
+				<li class="breadcrumb-item"><a th:href="@{/pets}">Pets</a></li>
+				<li class="breadcrumb-item active" aria-current="page" th:text="${edicao} ? 'Editar' : 'Novo pet'">Novo</li>
+			</ol>
+		</nav>
+		<div class="cabecalho-pagina">
+			<div>
+				<h1 th:text="${edicao} ? 'Editar pet' : 'Cadastrar pet'">Cadastrar pet</h1>
+				<p>A espécie e a data de nascimento definem o plano preventivo do pet.</p>
+			</div>
+		</div>
+
+		<form th:object="${pet}" method="post" class="card" novalidate
+			th:action="${edicao} ? @{/pets/{id}/atualizar(id=${pet.id})} : @{/pets}">
+			<div class="card-body p-4">
+				<div class="row">
+					<div class="col-md-6">
+						<div th:replace="~{fragmentos/formulario :: campo('nome', 'Nome do pet', 'text', null)}"></div>
+					</div>
+					<div class="col-md-6">
+						<div th:replace="~{fragmentos/formulario :: campoSelect('especie', 'Espécie', ${especies})}"></div>
+					</div>
+					<div class="col-md-6">
+						<div th:replace="~{fragmentos/formulario :: campo('raca', 'Raça', 'text', 'Se não souber, use SRD (sem raça definida).')}"></div>
+					</div>
+					<div class="col-md-3 col-6">
+						<div th:replace="~{fragmentos/formulario :: campo('dataNascimento', 'Nascimento', 'date', 'Aproximada, se necessário.')}"></div>
+					</div>
+					<div class="col-md-3 col-6">
+						<div th:replace="~{fragmentos/formulario :: campo('peso', 'Peso (kg)', 'number', null)}"></div>
+					</div>
+				</div>
+
+				<div class="form-check form-switch mb-3" th:if="${edicao}">
+					<input class="form-check-input" type="checkbox" role="switch" th:field="*{ativo}">
+					<label class="form-check-label" th:for="${#ids.prev('ativo')}">Pet ativo (desmarque se o pet não é mais acompanhado)</label>
+				</div>
+
+				<div class="d-flex justify-content-end gap-2 mt-2">
+					<a th:href="${edicao} ? @{/pets/{id}(id=${pet.id})} : @{/pets}" class="btn btn-light">Cancelar</a>
+					<button type="submit" class="btn btn-primary" th:text="${edicao} ? 'Salvar alterações' : 'Cadastrar pet'">Salvar</button>
+				</div>
+			</div>
+		</form>
+	</main>
+	<footer th:replace="~{fragmentos/layout :: rodape}"></footer>
+	<th:block th:replace="~{fragmentos/layout :: scripts}"></th:block>
+</body>
+</html>

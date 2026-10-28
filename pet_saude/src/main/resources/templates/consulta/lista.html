@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/layout :: cabecalho('Consultas')}"></head>
+<body>
+	<nav th:replace="~{fragmentos/layout :: menu}"></nav>
+	<main class="container py-4">
+		<div th:replace="~{fragmentos/layout :: alertas}"></div>
+
+		<div class="cabecalho-pagina">
+			<div>
+				<h1 th:text="${isAdminLogado} ? 'Agenda da clínica' : 'Minhas consultas'">Consultas</h1>
+				<p th:text="${isAdminLogado} ? 'Registre atendimentos e acompanhe cancelamentos.' : 'Para agendar, abra a ficha do pet.'">Descrição</p>
+			</div>
+			<a th:unless="${isAdminLogado}" th:href="@{/pets}" class="btn btn-coral"><i class="bi bi-calendar-plus me-1"></i>Agendar para um pet</a>
+		</div>
+
+		<nav class="filtro-pills d-flex flex-wrap gap-2 mb-3" aria-label="Filtrar por status">
+			<a th:href="@{/consultas}" class="btn btn-sm"
+				th:classappend="${statusFiltro == null} ? 'btn-primary' : 'btn-outline-secondary'"
+				th:aria-current="${statusFiltro == null} ? 'page' : null">Todas</a>
+			<a th:each="s : ${statusOpcoes}" th:href="@{/consultas(status=${s})}" class="btn btn-sm"
+				th:classappend="${statusFiltro == s} ? 'btn-primary' : 'btn-outline-secondary'"
+				th:aria-current="${statusFiltro == s} ? 'page' : null"
+				th:text="${s.descricao}">Status</a>
+		</nav>
+
+		<div class="card">
+			<th:block th:unless="${consultas.isEmpty()}">
+				<div th:replace="~{fragmentos/componentes :: tabelaConsultas(${consultas}, ${isAdminLogado}, true)}"></div>
+			</th:block>
+			<th:block th:if="${consultas.isEmpty()}">
+				<div th:replace="~{fragmentos/componentes :: estadoVazio('bi-calendar2', 'Nenhuma consulta encontrada', 'Altere o filtro ou agende uma nova consulta pela ficha do pet.')}"></div>
+			</th:block>
+		</div>
+
+		<th:block th:if="${isAdminLogado}">
+			<div th:replace="~{consulta/modal-realizar :: modalRealizar}"></div>
+		</th:block>
+	</main>
+	<footer th:replace="~{fragmentos/layout :: rodape}"></footer>
+	<th:block th:replace="~{fragmentos/layout :: scripts}"></th:block>
+</body>
+</html>

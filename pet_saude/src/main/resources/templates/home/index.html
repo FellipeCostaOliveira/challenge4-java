@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/layout :: cabecalho('Início')}"></head>
+<body>
+	<nav th:replace="~{fragmentos/layout :: menu}"></nav>
+	<main class="container py-4">
+		<div th:replace="~{fragmentos/layout :: alertas}"></div>
+
+		<!-- ===================== PAINEL DA CLÍNICA ===================== -->
+		<th:block th:if="${isAdminLogado}" th:with="painel=${painelAdmin}">
+			<div class="cabecalho-pagina">
+				<div>
+					<h1>Painel da clínica</h1>
+					<p>Visão do dia e pets que precisam de contato preventivo.</p>
+				</div>
+				<a th:href="@{/consultas(status='AGENDADA')}" class="btn btn-primary"><i class="bi bi-calendar2-week me-1"></i>Ver agenda</a>
+			</div>
+
+			<div class="row g-3 mb-4">
+				<div class="col-6 col-lg-3">
+					<div class="card h-100"><div class="card-body indicador">
+						<span class="icone"><i class="bi bi-people"></i></span>
+						<div><div class="valor" th:text="${painel.totalTutores}">0</div><div class="rotulo">Tutores</div></div>
+					</div></div>
+				</div>
+				<div class="col-6 col-lg-3">
+					<div class="card h-100"><div class="card-body indicador">
+						<span class="icone"><i class="bi bi-heart-pulse"></i></span>
+						<div><div class="valor" th:text="${painel.totalPetsAtivos}">0</div><div class="rotulo">Pets ativos</div></div>
+					</div></div>
+				</div>
+				<div class="col-6 col-lg-3">
+					<div class="card h-100"><div class="card-body indicador">
+						<span class="icone"><i class="bi bi-calendar2-check"></i></span>
+						<div><div class="valor" th:text="${painel.consultasAgendadas}">0</div><div class="rotulo">Consultas agendadas</div></div>
+					</div></div>
+				</div>
+				<div class="col-6 col-lg-3">
+					<div class="card h-100"><div class="card-body indicador">
+						<span class="icone coral"><i class="bi bi-broadcast"></i></span>
+						<div><div class="valor" th:text="${#lists.size(painel.radarPrevencao)}">0</div><div class="rotulo">Pets no radar</div></div>
+					</div></div>
+				</div>
+			</div>
+
+			<div class="row g-4">
+				<div class="col-lg-5">
+					<div class="card h-100">
+						<div class="card-header"><i class="bi bi-clock-history me-2 text-success"></i>Agenda de hoje</div>
+						<ul class="list-group list-group-flush" th:unless="${painel.agendaDeHoje.isEmpty()}">
+							<li class="list-group-item d-flex align-items-center gap-3 py-3" th:each="c : ${painel.agendaDeHoje}">
+								<span class="fw-bold fs-5 text-success" th:text="${#temporals.format(c.horario, 'HH:mm')}">09:00</span>
+								<div class="flex-grow-1">
+									<a class="fw-semibold text-decoration-none" th:href="@{/pets/{id}(id=${c.pet.id})}" th:text="${c.pet.nome}">Pet</a>
+									<div class="small text-suave" th:text="${c.tipo.descricao} + ' · ' + ${c.pet.tutor.nome}">Tipo</div>
+								</div>
+							</li>
+						</ul>
+						<th:block th:if="${painel.agendaDeHoje.isEmpty()}"><div th:replace="~{fragmentos/componentes :: estadoVazio('bi-cup-hot', 'Nenhuma consulta hoje', 'As consultas agendadas para hoje aparecem aqui.')}"></div></th:block>
+					</div>
+				</div>
+
+				<div class="col-lg-7">
+					<div class="card h-100">
+						<div class="card-header d-flex justify-content-between align-items-center">
+							<span><i class="bi bi-broadcast me-2" style="color: var(--pp-coral)"></i>Radar de Prevenção</span>
+							<small class="text-suave fw-normal">Pets ativos sem check-up em dia e sem consulta marcada</small>
+						</div>
+						<ul class="list-group list-group-flush" th:unless="${painel.radarPrevencao.isEmpty()}">
+							<li class="list-group-item py-3" th:each="item : ${painel.radarPrevencao}">
+								<div class="d-flex gap-3 align-items-start">
+									<span th:replace="~{fragmentos/componentes :: avatarPet(${item.pet.especie}, '')}"></span>
+									<div class="flex-grow-1">
+										<div class="d-flex flex-wrap justify-content-between gap-2">
+											<a class="fw-semibold text-decoration-none" th:href="@{/pets/{id}(id=${item.pet.id})}"
+												th:text="${item.pet.nome} + ' (' + ${item.resumo.faixaEtaria.descricao} + ')'">Pet</a>
+											<th:block th:replace="~{fragmentos/componentes :: badgeSituacao(${item.resumo.situacao})}"></th:block>
+										</div>
+										<div class="small text-suave mb-1" th:text="${item.resumo.recomendacao}">Recomendação</div>
+										<div class="small">
+											<i class="bi bi-person me-1"></i><span th:text="${item.pet.tutor.nome}">Tutor</span>
+											<span class="mx-1">·</span>
+											<i class="bi bi-telephone me-1"></i><a th:href="'tel:' + ${item.pet.tutor.telefone}" th:text="${item.pet.tutor.telefone}">Telefone</a>
+											<span class="mx-1">·</span>
+											<i class="bi bi-envelope me-1"></i><a th:href="'mailto:' + ${item.pet.tutor.email}" th:text="${item.pet.tutor.email}">E-mail</a>
+										</div>
+									</div>
+								</div>
+							</li>
+						</ul>
+						<th:block th:if="${painel.radarPrevencao.isEmpty()}"><div th:replace="~{fragmentos/componentes :: estadoVazio('bi-shield-check', 'Todos em dia!', 'Nenhum pet precisa de contato preventivo agora.')}"></div></th:block>
+					</div>
+				</div>
+			</div>
+		</th:block>
+
+		<!-- ===================== PAINEL DO TUTOR ===================== -->
+		<th:block th:unless="${isAdminLogado}" th:with="painel=${painelTutor}">
+			<div class="cabecalho-pagina">
+				<div>
+					<h1>Olá, <span th:text="${nomePerfilLogado}">Tutor</span>! 👋</h1>
+					<p>Veja como está o cuidado preventivo dos seus pets.</p>
+				</div>
+				<a th:href="@{/pets/novo}" class="btn btn-coral"><i class="bi bi-plus-lg me-1"></i>Cadastrar pet</a>
+			</div>
+
+			<div class="card mb-4" th:if="${painel.meusPets.isEmpty()}">
+				<div th:replace="~{fragmentos/componentes :: estadoVazio('bi-heart', 'Você ainda não cadastrou nenhum pet', 'Cadastre seu primeiro pet para receber o plano preventivo e agendar consultas.')}"></div>
+			</div>
+
+			<div class="row g-3 mb-4" th:unless="${painel.meusPets.isEmpty()}">
+				<div class="col-md-6 col-xl-4" th:each="item : ${painel.meusPets}">
+					<div class="card h-100">
+						<div class="card-body d-flex flex-column">
+							<div class="d-flex gap-3 align-items-center mb-3">
+								<span th:replace="~{fragmentos/componentes :: avatarPet(${item.pet.especie}, '')}"></span>
+								<div>
+									<h2 class="h5 mb-0">
+										<a class="text-decoration-none" th:href="@{/pets/{id}(id=${item.pet.id})}" th:text="${item.pet.nome}">Pet</a>
+									</h2>
+									<small class="text-suave"
+										th:text="${item.pet.especie.descricao} + ' · ' + ${item.resumo.faixaEtaria.descricao} + ' · ' + ${item.resumo.idadeDescricao}">Info</small>
+								</div>
+							</div>
+							<div class="flex-grow-1" th:if="${item.pet.ativo}">
+								<div th:replace="~{fragmentos/componentes :: planoPreventivo(${item.resumo})}"></div>
+							</div>
+							<p class="small text-suave flex-grow-1" th:unless="${item.pet.ativo}">Pet inativo.</p>
+							<div class="d-flex gap-2 mt-3">
+								<a th:if="${item.pet.ativo and !item.resumo.possuiConsultaAgendada()}" th:href="@{/consultas/agendar/{id}(id=${item.pet.id})}"
+									class="btn btn-sm btn-coral"><i class="bi bi-calendar-plus me-1"></i>Agendar</a>
+								<a th:href="@{/pets/{id}(id=${item.pet.id})}" class="btn btn-sm btn-outline-primary">Ver ficha</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="card">
+				<div class="card-header d-flex justify-content-between align-items-center">
+					<span><i class="bi bi-calendar2-check me-2 text-success"></i>Próximas consultas</span>
+					<a th:href="@{/consultas}" class="small fw-semibold">Ver todas</a>
+				</div>
+				<th:block th:unless="${painel.proximasConsultas.isEmpty()}"><div th:replace="~{fragmentos/componentes :: tabelaConsultas(${painel.proximasConsultas}, false, true)}"></div></th:block>
+				<th:block th:if="${painel.proximasConsultas.isEmpty()}"><div th:replace="~{fragmentos/componentes :: estadoVazio('bi-calendar2', 'Nenhuma consulta agendada', 'Use o botão Agendar no card do pet para marcar uma consulta.')}"></div></th:block>
+			</div>
+		</th:block>
+	</main>
+	<footer th:replace="~{fragmentos/layout :: rodape}"></footer>
+	<th:block th:replace="~{fragmentos/layout :: scripts}"></th:block>
+</body>
+</html>

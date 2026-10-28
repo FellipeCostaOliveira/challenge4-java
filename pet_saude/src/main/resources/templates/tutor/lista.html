@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/layout :: cabecalho('Tutores')}"></head>
+<body>
+	<nav th:replace="~{fragmentos/layout :: menu}"></nav>
+	<main class="container py-4">
+		<div class="cabecalho-pagina">
+			<div>
+				<h1>Tutores</h1>
+				<p>Tutores cadastrados e seus contatos.</p>
+			</div>
+			<form th:replace="~{fragmentos/formulario :: busca('/tutores', ${busca}, 'Buscar tutor pelo nome')}"></form>
+		</div>
+
+		<div class="card">
+			<div class="table-responsive" th:unless="${tutores.isEmpty()}">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th scope="col">Nome</th>
+							<th scope="col" class="d-none d-md-table-cell">CPF</th>
+							<th scope="col">Contato</th>
+							<th scope="col" class="text-end"><span class="visually-hidden">Ações</span></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="tutor : ${tutores}">
+							<td class="fw-semibold" th:text="${tutor.nome}">Nome</td>
+							<td class="d-none d-md-table-cell" th:text="${tutor.cpf}">CPF</td>
+							<td>
+								<div class="small" th:text="${tutor.email}">E-mail</div>
+								<div class="small text-suave" th:text="${tutor.telefone}">Telefone</div>
+							</td>
+							<td class="text-end"><a class="btn btn-sm btn-outline-primary" th:href="@{/tutores/{id}(id=${tutor.id})}">Ver tutor</a></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<th:block th:if="${tutores.isEmpty()}">
+				<div th:replace="~{fragmentos/componentes :: estadoVazio('bi-people', 'Nenhum tutor encontrado', 'Os tutores se cadastram pela tela pública de cadastro.')}"></div>
+			</th:block>
+		</div>
+	</main>
+	<footer th:replace="~{fragmentos/layout :: rodape}"></footer>
+	<th:block th:replace="~{fragmentos/layout :: scripts}"></th:block>
+</body>
+</html>

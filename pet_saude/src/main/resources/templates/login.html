@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/layout :: cabecalho('Entrar')}"></head>
+<body>
+	<main class="auth-pagina">
+		<section class="auth-marca">
+			<img th:src="@{/img/logo.svg}" alt="" width="72" height="72" class="mb-4">
+			<h2>Cuidar antes de tratar.</h2>
+			<p class="mb-4 opacity-75">O PetPath Saúde conecta tutores e a equipe da CLYVO VET para que nenhum pet fique sem check-up.</p>
+			<ul class="list-unstyled mb-0">
+				<li><i class="bi bi-calendar2-heart"></i><span>Agende consultas em poucos cliques, sem ligação nem fila.</span></li>
+				<li><i class="bi bi-activity"></i><span>Plano preventivo automático conforme espécie e idade do seu pet.</span></li>
+				<li><i class="bi bi-broadcast"></i><span>Radar de Prevenção para a clínica saber quem precisa de contato.</span></li>
+			</ul>
+		</section>
+
+		<section class="auth-formulario">
+			<div class="auth-card">
+				<div class="text-center mb-4 d-lg-none">
+					<img th:src="@{/img/logo.svg}" alt="" width="64" height="64">
+				</div>
+				<h1 class="h3 mb-1">Bem-vindo de volta</h1>
+				<p class="text-suave mb-4">Entre para acompanhar a saúde do seu pet.</p>
+
+				<div th:if="${param.logout}" class="alert alert-success" role="alert">
+					<i class="bi bi-check-circle-fill me-2"></i>Você saiu com segurança. Até logo!
+				</div>
+				<div th:if="${param.cadastroRealizado}" class="alert alert-success" role="alert">
+					<i class="bi bi-check-circle-fill me-2"></i>Cadastro realizado! Entre com seu usuário e senha.
+				</div>
+				<div th:if="${param.falha}" class="alert alert-danger" role="alert">
+					<i class="bi bi-exclamation-triangle-fill me-2"></i>Usuário e/ou senha inválidos.
+				</div>
+
+				<form th:action="@{/login}" method="post" class="card">
+					<div class="card-body p-4">
+						<div class="mb-3">
+							<label class="form-label" for="username">Usuário</label>
+							<input class="form-control" type="text" id="username" name="username" autocomplete="username" required autofocus>
+						</div>
+						<div class="mb-4">
+							<label class="form-label" for="password">Senha</label>
+							<input class="form-control" type="password" id="password" name="password" autocomplete="current-password" required>
+						</div>
+						<button type="submit" class="btn btn-primary w-100 py-2">Entrar</button>
+					</div>
+				</form>
+
+				<p class="text-center mt-3 mb-0">
+					Ainda não tem conta? <a th:href="@{/cadastro}" class="fw-semibold">Cadastre-se como tutor</a>
+				</p>
+			</div>
+		</section>
+	</main>
+	<th:block th:replace="~{fragmentos/layout :: scripts}"></th:block>
+</body>
+</html>

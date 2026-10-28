@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/layout :: cabecalho(${titulo})}"></head>
+<body>
+	<nav th:replace="~{fragmentos/layout :: menu}"></nav>
+	<main class="container py-5">
+		<div class="card mx-auto text-center" style="max-width: 560px;">
+			<div class="card-body p-5">
+				<div class="indicador justify-content-center mb-3">
+					<span class="icone coral"><i class="bi" th:classappend="${icone}"></i></span>
+				</div>
+				<h1 class="h3" th:text="${titulo}">Erro</h1>
+				<p class="text-suave" th:text="${mensagem}">Mensagem</p>
+				<div class="d-flex justify-content-center gap-2 mt-4">
+					<a href="javascript:history.back()" class="btn btn-light">Voltar</a>
+					<a th:href="@{/home}" class="btn btn-primary">Ir para o início</a>
+				</div>
+			</div>
+		</div>
+	</main>
+	<footer th:replace="~{fragmentos/layout :: rodape}"></footer>
+	<th:block th:replace="~{fragmentos/layout :: scripts}"></th:block>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<!-- Modal usado pela equipe da clínica para registrar uma consulta como realizada.
+     A URL do formulário é definida pelo js/app.js conforme o botão clicado. -->
+<body>
+	<div th:fragment="modalRealizar" class="modal fade" id="modalRealizar" tabindex="-1" aria-labelledby="tituloRealizar" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<form class="modal-content" method="post" th:action="@{/admin/consultas}">
+				<div class="modal-header">
+					<h2 class="modal-title h5" id="tituloRealizar">Registrar atendimento de <span data-nome-pet>pet</span></h2>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+				</div>
+				<div class="modal-body">
+					<label class="form-label" for="observacoes">Observações clínicas (opcional)</label>
+					<textarea class="form-control" id="observacoes" name="observacoes" rows="4" maxlength="300"
+						placeholder="Ex.: vacina V10 aplicada, peso estável, retorno em 30 dias."></textarea>
+					<div class="form-text">Ao confirmar, o plano preventivo do pet é recalculado automaticamente.</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-light" data-bs-dismiss="modal">Voltar</button>
+					<button type="submit" class="btn btn-primary"><i class="bi bi-check2-circle me-1"></i>Confirmar atendimento</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</body>
+</html>
