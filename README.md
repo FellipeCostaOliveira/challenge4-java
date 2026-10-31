@@ -10,8 +10,8 @@
 | | Link |
 |---|---|
 | 🌐 **Aplicação online (Render)** | **https://petpath-saude-final.onrender.com** <br> |
-| 🎬 **Vídeo** | **COLE AQUI O LINK DO VÍDEO** <br> _ex.: https://youtu.be/..._ |
-| 📁 Repositório | **COLE AQUI O LINK DO GITHUB** |
+| 🎬 **Vídeo** | **https://youtu.be/KHQKaDlhkIg** <br> |
+
 
  
 > ⏱️ A aplicação está no plano gratuito do Render: se ficar 15 minutos sem acesso, ela "dorme". O primeiro acesso pode levar **cerca de 1 minuto**; depois fica normal.
