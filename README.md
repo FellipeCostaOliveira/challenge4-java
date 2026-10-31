@@ -10,7 +10,7 @@
 | | Link |
 |---|---|
 | 🌐 **Aplicação online (Render)** | **https://petpath-saude-final.onrender.com** <br> |
-| 🎬 **Vídeo** | **https://youtu.be/KHQKaDlhkIg** <br> |
+| 🎬 **Vídeo** | **https://youtu.be/LF_H38ZYH3w** <br> |
 
 
  
